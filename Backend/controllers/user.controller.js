@@ -2,6 +2,7 @@ const userModel = require("../models/user.model");
 const TempuserModel = require("../models/tempuser.model");
 const { validationResult } = require("express-validator");
 const UserService = require("../services/user.service");
+const transporter = require("../services/MailerSender");
 
 module.exports.registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -13,7 +14,7 @@ module.exports.registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     const isTempUserExist = await TempuserModel.findOne({ email });
-    if (isUserExist) {
+    if (isTempUserExist) {
       return res.status(400).json({
         message: "User already exists with this email",
       });
@@ -35,6 +36,13 @@ module.exports.registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       otp,
+    });
+
+    const info = await transporter.sendMail({
+      from: `"EndPix AI" <${process.env.MAILER_USER}>`, // Sender address
+      to: email, // List of recipients
+      subject: "OTP Verification", // Subject line
+      text: `Your OTP is ${otp}`, // Plain text body
     });
 
     res.status(200).json({
