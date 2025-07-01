@@ -51,7 +51,6 @@ module.exports.registerUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Internal Server Error",
       error: error.message,
     });
   }
@@ -66,11 +65,14 @@ module.exports.verifyUser = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    const newUser = await UserService.VerifyUser(email, otp);
+    const NewUser = await UserService.VerifyUser(email, otp);
+
+    const token = await NewUser.JWT_Token();
 
     res.status(200).json({
       message: "User verified successfully",
-      newUser,
+      NewUser,
+      token,
     });
   } catch (error) {
     res.status(500).json({
@@ -104,9 +106,12 @@ module.exports.loginUser = async (req, res) => {
       });
     }
 
+    const token = await User.JWT_Token();
+
     res.status(200).json({
       message: "User logged in successfully",
       User,
+      token,
     });
   } catch (error) {
     res.status(500).json({
