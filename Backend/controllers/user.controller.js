@@ -69,6 +69,10 @@ module.exports.verifyUser = async (req, res) => {
 
     const token = await NewUser.JWT_Token();
 
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
+
     res.status(200).json({
       message: "User verified successfully",
       NewUser,
@@ -97,9 +101,7 @@ module.exports.loginUser = async (req, res) => {
       });
     }
 
-    const isPasswordMatch = await User.comparePassword(
-      password,
-    );
+    const isPasswordMatch = await User.comparePassword(password);
     if (!isPasswordMatch) {
       return res.status(400).json({
         message: "Invalid Credentials",
@@ -107,6 +109,10 @@ module.exports.loginUser = async (req, res) => {
     }
 
     const token = await User.JWT_Token();
+
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
 
     res.status(200).json({
       message: "User logged in successfully",
@@ -122,7 +128,6 @@ module.exports.loginUser = async (req, res) => {
 
 module.exports.getUser = async (req, res) => {
   try {
-
     const userId = req.user.id; // user ID is stored in req.user by the auth middleware
     const user = await userModel.findById(userId).select("-password");
 
@@ -136,10 +141,30 @@ module.exports.getUser = async (req, res) => {
       message: "User retrieved successfully",
       user,
     });
-
   } catch (error) {
     res.status(500).json({
       error: error.message,
     });
   }
-}
+};
+
+module.exports.logoutUser = async (req, res) => {
+  try {
+    const userId = req.user.id; // user ID is stored in req.user by the auth middleware
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    res.clearCookie("token");
+    res.status(200).json({
+      message: "User logged out successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
