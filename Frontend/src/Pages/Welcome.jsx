@@ -17,6 +17,7 @@ import cyberpunkTransformed from '../assets/cyberpunk-transformed.jpg';
 import emptyBackground from '../assets/empty-background.jpg';
 import cityscapeAdded from '../assets/cityscape-added.jpg';
 import inputExample from '../assets/input-example.jpg';
+import { Link } from 'react-router-dom';
 
 const Welcome = () => {
   const [loaded, setLoaded] = useState(false);
@@ -99,9 +100,9 @@ const Welcome = () => {
               <a href="#" className="text-emerald-300 hover:text-white transition-colors">Pricing</a>
               <a href="#" className="text-emerald-300 hover:text-white transition-colors">Examples</a>
               <a href="#" className="text-emerald-300 hover:text-white transition-colors">About</a>
-              <button className="mt-4 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-full font-medium shadow-lg">
+              <Link to="/register" className="mt-4 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-full font-medium shadow-lg">
                 Sign In
-              </button>
+              </Link>
             </nav>
           </motion.div>
         )}
@@ -169,13 +170,12 @@ const Welcome = () => {
             >
               Pricing
             </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <Link 
+              to="/register"
               className="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-full font-medium shadow-lg hover:shadow-emerald-500/30 transition-all"
             >
               Sign In
-            </motion.button>
+            </Link>
           </div>
           
           {/* Mobile Menu Button */}
@@ -212,14 +212,13 @@ const Welcome = () => {
               <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6 md:mb-8 px-4">
                 EndPix NextGen combines cutting-edge artificial intelligence with intuitive controls to transform your photos beyond imagination.
               </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full font-bold text-base md:text-lg shadow-lg hover:shadow-emerald-500/40 flex items-center space-x-3 mx-auto"
+              <Link
+                to="/register"
+                className="px-6 md:w-72 w-56 py-3 md:px-8 md:py-4 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full font-bold text-base md:text-lg shadow-lg hover:shadow-emerald-500/40 flex items-center justify-between space-x-3 mx-auto"
               >
                 <span>Start Creating Now</span>
                 <FaArrowRight />
-              </motion.button>
+              </Link>
             </motion.div>
 
             {/* AI Showcase Section */}
