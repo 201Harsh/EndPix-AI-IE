@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaLock, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../Config/Axios';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,9 @@ const Register = () => {
     e.preventDefault();
     console.log('Registration data:', formData);
     // Add your registration logic here
+
+    const response = axiosInstance.post('/users/register', formData)
+
   };
 
   return (
