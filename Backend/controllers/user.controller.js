@@ -78,3 +78,39 @@ module.exports.verifyUser = async (req, res) => {
     });
   }
 };
+
+module.exports.loginUser = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { email, password } = req.body;
+
+    const User = await userModel.findOne({ email });
+    if (!User) {
+      return res.status(400).json({
+        message: "Invalid Credentials",
+      });
+    }
+
+    const isPasswordMatch = await User.comparePassword(
+      password,
+    );
+    if (!isPasswordMatch) {
+      return res.status(400).json({
+        message: "Invalid Credentials",
+      });
+    }
+
+    res.status(200).json({
+      message: "User logged in successfully",
+      User,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
