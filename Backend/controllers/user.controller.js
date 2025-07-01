@@ -12,7 +12,14 @@ module.exports.registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const isUserExist = await TempuserModel.findOne({ email });
+    const isTempUserExist = await TempuserModel.findOne({ email });
+    if (isUserExist) {
+      return res.status(400).json({
+        message: "User already exists with this email",
+      });
+    }
+
+    const isUserExist = await userModel.findOne({ email });
     if (isUserExist) {
       return res.status(400).json({
         message: "User already exists with this email",
@@ -37,6 +44,28 @@ module.exports.registerUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+module.exports.verifyUser = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { email, otp } = req.body;
+
+    const newUser = await UserService.VerifyUser(email, otp);
+
+    res.status(200).json({
+      message: "User verified successfully",
+      newUser,
+    });
+  } catch (error) {
+    res.status(500).json({
       error: error.message,
     });
   }

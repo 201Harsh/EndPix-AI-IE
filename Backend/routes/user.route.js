@@ -14,4 +14,13 @@ router.post(
   userController.registerUser
 );
 
+router.post(
+  "/verify",
+  [
+    body("email").isEmail().withMessage("Valid email is required"),
+    body("otp").isNumeric().withMessage("OTP must be a number"),
+  ],
+  userController.verifyUser
+);
+
 module.exports = router;
