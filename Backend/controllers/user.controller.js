@@ -45,8 +45,8 @@ module.exports.registerUser = async (req, res) => {
       text: `Your OTP is ${otp}`, // Plain text body
     });
 
-    res.status(200).json({
-      message: "User registered successfully",
+    res.status(201).json({
+      message: "Verify email to complete registration",
       newUser,
     });
   } catch (error) {
