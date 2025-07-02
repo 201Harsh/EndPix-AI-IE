@@ -115,7 +115,11 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axiosInstance.post("/users/logout");
+      const res = await axiosInstance.post("/users/logout", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (res.status === 200) {
         localStorage.clear();
         toast.success(res.data.message, {
@@ -135,7 +139,7 @@ const Dashboard = () => {
         Navigate("/");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error(error.response.data.message, {
         position: "top-right",
         autoClose: 5000,
