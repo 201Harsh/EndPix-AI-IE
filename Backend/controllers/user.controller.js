@@ -74,7 +74,7 @@ module.exports.verifyUser = async (req, res) => {
     });
 
     res.status(200).json({
-      message: "User verified successfully",
+      message: "User verified and Registered successfully",
       NewUser,
       token,
     });
