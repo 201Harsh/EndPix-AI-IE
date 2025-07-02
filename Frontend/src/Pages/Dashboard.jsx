@@ -9,6 +9,9 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import axiosInstance from "../Config/Axios";
+import { toast, Bounce } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -107,6 +110,45 @@ const Dashboard = () => {
   };
 
   const UserName = localStorage.getItem("name");
+
+  const Navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const res = await axiosInstance.post("/users/logout");
+      if (res.status === 200) {
+        localStorage.clear();
+        toast.success(res.data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
+        if (res.data.status === "success") {
+          localStorage.removeItem("token");
+        }
+        Navigate("/");
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-950 text-gray-100 p-4 md:p-8">
@@ -243,7 +285,10 @@ const Dashboard = () => {
             EndPix NextGen
           </h1>
         </div>
-        <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm md:text-base">
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm md:text-base"
+        >
           Sign Out
         </button>
       </header>
