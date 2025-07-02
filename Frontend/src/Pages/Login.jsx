@@ -1,31 +1,79 @@
-import { useState } from 'react';
-import { FaEye, FaEyeSlash, FaEnvelope, FaLock, FaArrowLeft } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import {
+  FaEye,
+  FaEyeSlash,
+  FaEnvelope,
+  FaLock,
+  FaArrowLeft,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../Config/Axios";
+import { toast, Bounce } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  const Navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login data:', formData);
-    // Add your login logic here
+
+    try {
+      const response = await axiosInstance.post("/users/login", formData);
+
+      if (response.status === 200) {
+        toast.success(response.data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
+
+        const userData = response.data.User;
+
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", userData.email);
+        localStorage.setItem("name", userData.name);
+
+        setTimeout(() => {
+          Navigate("/dashboard");
+        }, 2000);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-950 text-gray-100 flex items-center justify-center p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -91,7 +139,10 @@ const Login = () => {
                 Remember me
               </label>
             </div>
-            <Link to="/forgot-password" className="text-sm text-emerald-400 hover:underline">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-emerald-400 hover:underline"
+            >
               Forgot password?
             </Link>
           </div>
@@ -107,8 +158,11 @@ const Login = () => {
         </form>
 
         <div className="mt-6 text-center text-gray-400">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-emerald-400 hover:underline font-medium">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-emerald-400 hover:underline font-medium"
+          >
             Register
           </Link>
         </div>
