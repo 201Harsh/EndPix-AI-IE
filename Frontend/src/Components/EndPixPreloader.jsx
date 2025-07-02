@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const EndPixPreloader = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -8,7 +8,7 @@ const EndPixPreloader = () => {
   useEffect(() => {
     // Simulate loading progress
     const interval = setInterval(() => {
-      setLoadingProgress(prev => {
+      setLoadingProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setTimeout(() => setIsComplete(true), 500);
@@ -43,7 +43,7 @@ const EndPixPreloader = () => {
             transition={{
               duration: 10 + Math.random() * 10,
               repeat: Infinity,
-              repeatType: 'reverse',
+              repeatType: "reverse",
             }}
           />
         ))}
@@ -65,7 +65,7 @@ const EndPixPreloader = () => {
           transition={{
             duration: 4,
             repeat: Infinity,
-            repeatType: 'mirror',
+            repeatType: "mirror",
           }}
           className="mb-8"
         >
@@ -108,8 +108,10 @@ const EndPixPreloader = () => {
         {/* Loading state */}
         {!isComplete ? (
           <>
-            <p className="text-gray-300 mb-6">Initializing image enhancement engine...</p>
-            
+            <p className="text-emerald-100 mb-6 font-mono">
+              █▓▒░ Loading neural enchantments... ░▒▓█
+            </p>
+
             {/* Progress bar */}
             <div className="w-full bg-gray-700 bg-opacity-50 rounded-full h-2.5 mb-3 overflow-hidden">
               <motion.div
@@ -119,13 +121,15 @@ const EndPixPreloader = () => {
                 transition={{ duration: 0.3 }}
               />
             </div>
-            
-            <p className="text-sm text-emerald-300">{Math.floor(loadingProgress)}% complete</p>
-            
+
+            <p className="text-sm text-emerald-300">
+              {Math.floor(loadingProgress)}% complete
+            </p>
+
             {/* Spinner */}
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               className="mt-8 inline-block"
             >
               <svg
@@ -152,7 +156,7 @@ const EndPixPreloader = () => {
             className="mt-8"
           >
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.8, 1, 0.8],
               }}
@@ -161,7 +165,9 @@ const EndPixPreloader = () => {
             >
               ✓
             </motion.div>
-            <p className="text-xl text-emerald-300 font-medium">Ready to enhance!</p>
+            <p className="text-xl text-emerald-300 font-medium">
+              Ready to enhance!
+            </p>
             <p className="text-gray-400 mt-2">Redirecting to application...</p>
           </motion.div>
         )}
@@ -170,11 +176,12 @@ const EndPixPreloader = () => {
       {/* Footer */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.5 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-6 text-xs text-gray-500"
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="absolute bottom-6 text-xs text-gray-100"
       >
-        AI-Powered Image Enhancement
+        <span className="font-bold text-emerald-400">EndGaming</span> AI-Powered
+        Image Enhancement
       </motion.div>
     </div>
   );

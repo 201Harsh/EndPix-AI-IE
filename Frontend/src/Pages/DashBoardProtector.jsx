@@ -27,7 +27,7 @@ const DashBoardProtector = ({ children }) => {
         if (res.status === 200) {
           setTimeout(() => {
             setisLoading(false);
-          }, 5000);
+          }, 4500);
         } else {
           localStorage.clear();
           Navigate("/");

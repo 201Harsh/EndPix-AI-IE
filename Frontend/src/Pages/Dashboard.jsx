@@ -34,7 +34,7 @@ const Dashboard = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowWelcome(false);
-    }, 4000);
+    }, 2000);
 
     const followTimer = setTimeout(() => {
       setShowFollowPopup(true);
@@ -200,7 +200,8 @@ const Dashboard = () => {
                 transition={{ delay: 0.9, duration: 0.5 }}
                 className="text-xl text-gray-300"
               >
-                Ready to transform your images with AI magic?
+                Ready to transform your images with{" "}
+                <span className="text-emerald-400">Harsh's</span> AI magic?
               </motion.p>
               <motion.div
                 initial={{ width: 0 }}
@@ -213,68 +214,88 @@ const Dashboard = () => {
         )}
       </AnimatePresence>
 
-      {/* Follow on Instagram Popup */}
-      <AnimatePresence>
-        {showFollowPopup && !localStorage.getItem("followShown") && (
+      {/* Full-screen Follow on Instagram Popup */}
+<AnimatePresence>
+  {showFollowPopup && !localStorage.getItem("followShown") && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed inset-0 z-50 bg-gray-800/30 backdrop-blur flex items-center justify-center p-4"
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.9, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="relative bg-gray-800 border-2 border-emerald-500 rounded-xl p-6 shadow-2xl max-w-md w-full"
+      >
+        {/* Close (X) button */}
+        <button
+          onClick={handleCloseFollowPopup}
+          className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
+          aria-label="Close"
+        >
+          <FaTimes className="text-xl" />
+        </button>
+
+        <div className="flex flex-col items-center text-center space-y-4 pt-2">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            className="fixed bottom-4 right-4 z-50"
+            animate={{
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+            }}
+            className="text-emerald-400 text-4xl"
           >
-            <div className="relative bg-gray-800 border border-emerald-500 rounded-xl p-4 shadow-lg max-w-xs">
-              <button
-                onClick={handleCloseFollowPopup}
-                className="absolute top-2 right-2 text-gray-400 hover:text-white"
-              >
-                <FaTimes />
-              </button>
-              <div className="flex items-start space-x-3">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                  className="text-emerald-400 text-xl"
-                >
-                  <FaInstagram />
-                </motion.div>
-                <div>
-                  <h3 className="font-bold text-emerald-300">
-                    Follow us on Instagram
-                  </h3>
-                  <p className="text-sm text-gray-300 mt-1">
-                    For more amazing AI tools and updates!
-                  </p>
-                  <a
-                    onClick={handleCloseFollowPopup}
-                    href="https://www.instagram.com/201harshs/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-block px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
-                  >
-                    Follow Now
-                  </a>
-                </div>
-              </div>
-              <motion.div
-                className="absolute -z-10 inset-0 bg-emerald-500 rounded-xl blur-lg opacity-20"
-                animate={{
-                  opacity: [0.1, 0.2, 0.1],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                }}
-              />
-            </div>
+            <FaInstagram />
           </motion.div>
-        )}
-      </AnimatePresence>
+
+          <div>
+            <h3 className="font-bold text-2xl text-emerald-300 mb-2">
+              Follow me on Instagram
+            </h3>
+            <p className="text-gray-300">
+              For more amazing AI tools and updates!
+            </p>
+          </div>
+
+          <div className="flex space-x-4 mt-4">
+            <a
+              href="https://www.instagram.com/201harshs/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleCloseFollowPopup}
+              className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-lg font-medium hover:opacity-90 transition-opacity"
+            >
+              Follow Now
+            </a>
+            <button
+              onClick={handleCloseFollowPopup}
+              className="px-6 py-2 bg-gray-700 rounded-lg font-medium hover:bg-gray-600 transition-colors"
+            >
+              Maybe Later
+            </button>
+          </div>
+        </div>
+
+        <motion.div
+          className="absolute -z-10 inset-0 bg-emerald-500 rounded-xl blur-lg opacity-20"
+          animate={{
+            opacity: [0.1, 0.2, 0.1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+          }}
+        />
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
       {/* Header */}
       <header className="flex justify-between items-center mb-8">
