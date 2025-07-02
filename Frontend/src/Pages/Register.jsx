@@ -313,11 +313,11 @@ const Register = () => {
             <div className="ml-3 text-sm">
               <label htmlFor="terms" className="text-gray-300">
                 I agree to the{" "}
-                <a href="#" className="text-emerald-400 hover:underline">
+                <a className="text-emerald-400 hover:underline">
                   Terms of Service
                 </a>{" "}
                 and{" "}
-                <a href="#" className="text-emerald-400 hover:underline">
+                <a  className="text-emerald-400 hover:underline">
                   Privacy Policy
                 </a>
               </label>
@@ -352,7 +352,7 @@ const Register = () => {
             to="/login"
             className="text-emerald-400 hover:underline font-medium"
           >
-            Sign in
+            Login
           </Link>
         </div>
       </motion.div>
