@@ -2,7 +2,7 @@ const userModel = require("../models/user.model");
 const TempuserModel = require("../models/tempuser.model");
 const { validationResult } = require("express-validator");
 const UserService = require("../services/user.service");
-const transporter = require("../services/MailerSender");
+const transporter = require("../services/MailerSender.service");
 
 module.exports.registerUser = async (req, res) => {
   const errors = validationResult(req);
