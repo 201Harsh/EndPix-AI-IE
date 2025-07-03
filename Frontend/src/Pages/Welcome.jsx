@@ -32,7 +32,7 @@ import { Link } from "react-router-dom";
 const Welcome = () => {
   const [loaded, setLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("enhance");
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(50);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -284,97 +284,118 @@ const Welcome = () => {
                   className="p-4 md:p-6"
                 >
                   {activeTab === "enhance" && (
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-emerald-300">
-                        AI Photo Enhancement
-                      </h3>
-                      <p className="text-gray-300 mb-4 md:mb-6 max-w-2xl mx-auto text-sm md:text-base">
-                        Our AI analyzes your image to automatically improve
-                        lighting, colors, sharpness, and details while
-                        preserving natural look.
-                      </p>
-                      <div className="relative h-64 sm:h-80 md:h-96 w-full bg-gray-900 rounded-lg md:rounded-xl overflow-hidden">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <img
-                            src={originalPortrait}
-                            alt="Original"
-                            className="absolute inset-0 w-full h-full object-cover"
-                            style={{ opacity: 1 - sliderValue / 100 }}
-                          />
-                          <img
-                            src={enhancedPortrait}
-                            alt="Enhanced"
-                            className="absolute inset-0 w-full h-full object-cover"
-                            style={{ opacity: sliderValue / 100 }}
-                          />
-                        </div>
-                        <div className="absolute bottom-4 md:bottom-6 left-0 right-0 px-4 md:px-6">
-                          <div className="relative group">
-                            {/* Custom track */}
-                            <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-                              {/* Filled track with gradient */}
-                              <div
-                                className="h-full bg-gradient-to-r from-emerald-400/30 to-emerald-400 rounded-full"
-                                style={{ width: `${sliderValue}%` }}
-                              />
-                            </div>
-
-                            {/* Custom thumb with glow effect */}
-                            <input
-                              type="range"
-                              min="0"
-                              max="100"
-                              value={sliderValue}
-                              onChange={(e) => setSliderValue(e.target.value)}
-                              className="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer z-10"
-                            />
-                            <div
-                              className="absolute top-1/2 h-4 w-4 -mt-2 rounded-full bg-emerald-400 shadow-lg transform -translate-x-1/2 z-20
-                 transition-all duration-150 ease-out group-hover:scale-125 group-hover:shadow-emerald-400/50"
-                              style={{ left: `${sliderValue}%` }}
-                            >
-                              {/* Inner glow */}
-                              <div className="absolute inset-0 rounded-full bg-emerald-400 animate-pulse opacity-70" />
-                            </div>
-
-                            {/* Value indicator that follows the thumb */}
-                            <div
-                              className="absolute -top-8 transform -translate-x-1/2 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded-md
-                 shadow-lg transition-opacity duration-200 opacity-0 group-hover:opacity-100"
-                              style={{ left: `${sliderValue}%` }}
-                            >
-                              {sliderValue}%{/* Triangle pointer */}
-                              <div
-                                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full w-0 h-0 
-                      border-l-4 border-r-4 border-b-0 border-t-4 border-l-transparent border-r-transparent 
-                      border-t-emerald-600"
-                              />
-                            </div>
-                          </div>
-
-                          {/* Labels with animated underline */}
-                          <div className="flex justify-between text-xs md:text-sm mt-3">
-                            <span className="relative bg-gray-700 px-1 text-gray-200 group">
-                              Original
-                              <span
-                                className={`absolute bottom-0 left-0 h-0.5 bg-gray-500 transition-all duration-300 ${
-                                  sliderValue < 20 ? "w-full" : "w-0"
-                                }`}
-                              />
-                            </span>
-                            <span className="relative px-1 bg-gray-700 text-gray-200 group">
-                              AI Enhanced
-                              <span
-                                className={`absolute bottom-0 left-0 h-0.5 bg-emerald-400 transition-all duration-300 ${
-                                  sliderValue > 80 ? "w-full" : "w-0"
-                                }`}
-                              />
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+  <div>
+    <h3 className="text-xl md:text-2xl font-semibold mb-3 md:mb-4 text-emerald-300">
+      AI Photo Enhancement
+    </h3>
+    <p className="text-gray-300 mb-4 md:mb-6 max-w-2xl mx-auto text-sm md:text-base">
+      Our AI analyzes your image to automatically improve lighting, colors, 
+      sharpness, and details while preserving natural look.
+    </p>
+    
+    <div className="relative w-full h-64 sm:h-80 md:h-96 max-w-4xl mx-auto bg-gray-900 rounded-lg md:rounded-xl overflow-hidden">
+      {/* Container for both images */}
+      <div className="relative w-full h-full flex">
+        {/* Original image (left side) */}
+        <div 
+          className="h-full overflow-hidden"
+          style={{ width: `${sliderValue}%` }}
+        >
+          <img
+            src={originalPortrait}
+            alt="Original"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        
+        {/* Enhanced image (right side) */}
+        <div 
+          className="h-full overflow-hidden"
+          style={{ width: `${100 - sliderValue}%` }}
+        >
+          <img
+            src={enhancedPortrait}
+            alt="Enhanced"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+      
+      {/* Vertical slider control */}
+      <div className="absolute inset-0">
+        {/* Moving divider line */}
+        <div 
+          className="absolute top-0 bottom-0 w-1 bg-white/80 shadow-lg cursor-ew-resize"
+          style={{ left: `${sliderValue}%` }}
+          onTouchStart={(e) => {
+            const touch = e.touches[0];
+            const startX = touch.clientX;
+            const startValue = sliderValue;
+            const sliderWidth = e.currentTarget.parentElement.offsetWidth;
+            
+            const handleMove = (moveEvent) => {
+              const touch = moveEvent.touches[0];
+              const dx = touch.clientX - startX;
+              const percentChange = (dx / sliderWidth) * 100;
+              let newValue = startValue + percentChange;
+              newValue = Math.max(0, Math.min(100, newValue));
+              setSliderValue(newValue);
+            };
+            
+            const handleEnd = () => {
+              document.removeEventListener('touchmove', handleMove);
+              document.removeEventListener('touchend', handleEnd);
+            };
+            
+            document.addEventListener('touchmove', handleMove);
+            document.addEventListener('touchend', handleEnd);
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            const startX = e.clientX;
+            const startValue = sliderValue;
+            const sliderWidth = e.currentTarget.parentElement.offsetWidth;
+            
+            const handleMove = (moveEvent) => {
+              const dx = moveEvent.clientX - startX;
+              const percentChange = (dx / sliderWidth) * 100;
+              let newValue = startValue + percentChange;
+              newValue = Math.max(0, Math.min(100, newValue));
+              setSliderValue(newValue);
+            };
+            
+            const handleUp = () => {
+              document.removeEventListener('mousemove', handleMove);
+              document.removeEventListener('mouseup', handleUp);
+            };
+            
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleUp);
+          }}
+        >
+          {/* Handle */}
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2
+                        w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-xl
+                        flex items-center justify-center">
+            <div className="w-1 h-4 bg-emerald-400 rounded-full transform rotate-90"></div>
+            {/* Arrow indicators */}
+            <div className="absolute -left-1 -translate-x-full text-white text-xs font-bold whitespace-nowrap">
+              ← Original
+            </div>
+            <div className="absolute -right-1 translate-x-full text-white text-xs font-bold whitespace-nowrap">
+              Enhanced →
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Percentage indicator - centered at bottom for mobile */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1 rounded-full text-sm font-medium">
+        Slide to compare • {Math.round(sliderValue)}%
+      </div>
+    </div>
+  </div>
+)}
 
                   {activeTab === "transform" && (
                     <div>
