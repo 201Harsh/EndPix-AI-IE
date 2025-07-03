@@ -24,6 +24,7 @@ const Dashboard = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [showFollowPopup, setShowFollowPopup] = useState(false);
   const fileInputRef = useRef(null);
+  const resultsRef = useRef(null);
 
   const options = [
     { id: "enhance", label: "Enhance", icon: <FaMagic /> },
@@ -154,6 +155,15 @@ const Dashboard = () => {
     }
   };
 
+  useEffect(() => {
+    if (generatedImage && resultsRef.current) {
+      resultsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [generatedImage]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-emerald-950 text-gray-100 p-4 md:p-8">
       {/* Welcome Animation */}
@@ -215,87 +225,87 @@ const Dashboard = () => {
       </AnimatePresence>
 
       {/* Full-screen Follow on Instagram Popup */}
-<AnimatePresence>
-  {showFollowPopup && !localStorage.getItem("followShown") && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="fixed inset-0 z-50 bg-gray-800/30 backdrop-blur flex items-center justify-center p-4"
-    >
-      <motion.div
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: -20 }}
-        transition={{ duration: 0.3 }}
-        className="relative bg-gray-800 border-2 border-emerald-500 rounded-xl p-6 shadow-2xl max-w-md w-full"
-      >
-        {/* Close (X) button */}
-        <button
-          onClick={handleCloseFollowPopup}
-          className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
-          aria-label="Close"
-        >
-          <FaTimes className="text-xl" />
-        </button>
-
-        <div className="flex flex-col items-center text-center space-y-4 pt-2">
+      <AnimatePresence>
+        {showFollowPopup && !localStorage.getItem("followShown") && (
           <motion.div
-            animate={{
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-            }}
-            className="text-emerald-400 text-4xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-50 bg-gray-800/30 backdrop-blur flex items-center justify-center p-4"
           >
-            <FaInstagram />
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="relative bg-gray-800 border-2 border-emerald-500 rounded-xl p-6 shadow-2xl max-w-md w-full"
+            >
+              {/* Close (X) button */}
+              <button
+                onClick={handleCloseFollowPopup}
+                className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
+                aria-label="Close"
+              >
+                <FaTimes className="text-xl" />
+              </button>
+
+              <div className="flex flex-col items-center text-center space-y-4 pt-2">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                  className="text-emerald-400 text-4xl"
+                >
+                  <FaInstagram />
+                </motion.div>
+
+                <div>
+                  <h3 className="font-bold text-2xl text-emerald-300 mb-2">
+                    Follow me on Instagram
+                  </h3>
+                  <p className="text-gray-300">
+                    For more amazing AI tools and updates!
+                  </p>
+                </div>
+
+                <div className="flex space-x-4 mt-4">
+                  <a
+                    href="https://www.instagram.com/201harshs/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handleCloseFollowPopup}
+                    className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                  >
+                    Follow Now
+                  </a>
+                  <button
+                    onClick={handleCloseFollowPopup}
+                    className="px-6 py-2 bg-gray-700 rounded-lg font-medium hover:bg-gray-600 transition-colors"
+                  >
+                    Maybe Later
+                  </button>
+                </div>
+              </div>
+
+              <motion.div
+                className="absolute -z-10 inset-0 bg-emerald-500 rounded-xl blur-lg opacity-20"
+                animate={{
+                  opacity: [0.1, 0.2, 0.1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                }}
+              />
+            </motion.div>
           </motion.div>
-
-          <div>
-            <h3 className="font-bold text-2xl text-emerald-300 mb-2">
-              Follow me on Instagram
-            </h3>
-            <p className="text-gray-300">
-              For more amazing AI tools and updates!
-            </p>
-          </div>
-
-          <div className="flex space-x-4 mt-4">
-            <a
-              href="https://www.instagram.com/201harshs/"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleCloseFollowPopup}
-              className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-lg font-medium hover:opacity-90 transition-opacity"
-            >
-              Follow Now
-            </a>
-            <button
-              onClick={handleCloseFollowPopup}
-              className="px-6 py-2 bg-gray-700 rounded-lg font-medium hover:bg-gray-600 transition-colors"
-            >
-              Maybe Later
-            </button>
-          </div>
-        </div>
-
-        <motion.div
-          className="absolute -z-10 inset-0 bg-emerald-500 rounded-xl blur-lg opacity-20"
-          animate={{
-            opacity: [0.1, 0.2, 0.1],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-          }}
-        />
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+        )}
+      </AnimatePresence>
 
       {/* Header */}
       <header className="flex justify-between items-center mb-8">
@@ -449,18 +459,48 @@ const Dashboard = () => {
 
             {(selectedOption === "style" || selectedOption === "generate") && (
               <div className="mb-6">
-                <label className="block text-gray-300 mb-2">AI Prompt</label>
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder={
-                    selectedOption === "style"
-                      ? 'Describe the style you want (e.g., "cyberpunk neon")'
-                      : 'Describe what to add (e.g., "futuristic city in background")'
-                  }
-                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                  rows={3}
-                />
+                {selectedOption === "style" ? (
+                  <>
+                    <label className="block text-gray-300 mb-2">
+                      Select Style
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {[
+                        { id: "hyperrealistic", label: "Hyper-Realistic" },
+                        { id: "anime", label: "Anime" },
+                        { id: "cyberpunk", label: "Neon Cyberpunk" },
+                        { id: "oilpaint", label: "Oil Painting" },
+                      ].map((style) => (
+                        <motion.button
+                          key={style.id}
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => setPrompt(style.label)}
+                          className={`p-3 rounded-lg border ${
+                            prompt === style.label
+                              ? "border-emerald-400 bg-emerald-900 bg-opacity-30"
+                              : "border-gray-600 hover:border-emerald-300"
+                          }`}
+                        >
+                          {style.label}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <label className="block text-gray-300 mb-2">
+                      AI Prompt
+                    </label>
+                    <textarea
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      placeholder='Describe what to add (e.g., "futuristic city in background")'
+                      className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      rows={3}
+                    />
+                  </>
+                )}
               </div>
             )}
 
@@ -492,6 +532,7 @@ const Dashboard = () => {
         <AnimatePresence>
           {(isGenerating || generatedImage) && (
             <motion.section
+              ref={resultsRef}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
