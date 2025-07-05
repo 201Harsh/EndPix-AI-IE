@@ -1,8 +1,10 @@
 const { GoogleGenAI, Modality } = require("@google/genai");
 const fs = require("fs");
 
-async function main() {
-  const ai = new GoogleGenAI({ apiKey: "AIzaSyD3m4M_DQmaBTxW6rpXcQzYZZEhQWwNnQE" });
+async function main(prompt, image, type, style) {
+  const ai = new GoogleGenAI({
+    apiKey: process.env.IMAGE_AI_API,
+  });
 
   // Load the image from the local file system
   const imagePath = "./test.png";
@@ -41,4 +43,4 @@ async function main() {
   }
 }
 
-main();
+module.exports = main;

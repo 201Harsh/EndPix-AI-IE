@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [error, setError] = useState("");
   const [showWelcome, setShowWelcome] = useState(true);
   const [showFollowPopup, setShowFollowPopup] = useState(false);
+  const [EnchancedImage, setEnchancedImage] = useState("");
   const fileInputRef = useRef(null);
   const resultsRef = useRef(null);
 
@@ -60,7 +61,7 @@ const Dashboard = () => {
   //   return () => clearTimeout(timer);
   // }, []);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -79,9 +80,26 @@ const Dashboard = () => {
       setPreviewUrl(reader.result);
     };
     reader.readAsDataURL(file);
+
+    // ✅ Upload to backend
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axiosInstance.post("image/get-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (res.status === 200) {
+        setEnchancedImage(res.data.image); // Example Test Only ✅
+      }
+    } catch (error) {
+      setError("Upload failed");
+    }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!selectedFile) {
       setError("Please upload an image first");
       return;
@@ -94,8 +112,7 @@ const Dashboard = () => {
     // Simulate AI generation (replace with actual API call)
     setTimeout(() => {
       setIsGenerating(false);
-      // In a real app, you would set the generated image from the API response
-      setGeneratedImage(previewUrl); // Using the same image for demo
+      setGeneratedImage(EnchancedImage);
     }, 3000);
   };
 
@@ -372,7 +389,7 @@ const Dashboard = () => {
               </motion.div>
               <p className="text-center text-gray-300 mb-2">
                 {selectedFile
-                  ? selectedFile.name
+                  ? "Your Image: " + selectedFile.name.slice(0, 30)
                   : "Click to upload or drag and drop"}
               </p>
               <p className="text-sm text-gray-400">PNG, JPG, JPEG up to 10MB</p>
@@ -427,7 +444,7 @@ const Dashboard = () => {
         </motion.section>
 
         {/* Options Section */}
-        {selectedFile && (
+        {selectedFile && !error && (
           <motion.section
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

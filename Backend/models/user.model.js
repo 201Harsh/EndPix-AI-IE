@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 10,
   },
+  ImageUrl: {
+    type: String,
+    default: "",
+  },
 });
 
 UserSchema.methods.JWT_Token = function () {
