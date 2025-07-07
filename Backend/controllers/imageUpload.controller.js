@@ -14,10 +14,13 @@ module.exports.GetImage = async (req, res) => {
     }
 
     const result = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream({ resource_type: "image" }, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
+      const stream = cloudinary.uploader.upload_stream(
+        { resource_type: "image" },
+        (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        }
+      );
       stream.end(req.file.buffer);
     });
 
@@ -38,7 +41,7 @@ module.exports.GetImage = async (req, res) => {
 
 module.exports.EnhanceImage = async (req, res) => {
   try {
-    const { prompt, style, resolution } = req.body;
+    const { prompt, style, upscaling } = req.body;
 
     const UserId = req.user.id;
     const User = await userModel.findById(UserId);
@@ -61,7 +64,7 @@ module.exports.EnhanceImage = async (req, res) => {
       UserImage,
       prompt,
       style,
-      advanceSettings
+      upscaling
     );
 
     res.status(200).json({
