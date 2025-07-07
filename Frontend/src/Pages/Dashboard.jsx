@@ -294,7 +294,7 @@ const Dashboard = () => {
     // Create a temporary anchor element
     const link = document.createElement("a");
     link.href = processedImage;
-    link.download = `enhanced-${selectedFile.name}`;
+    link.download = `enhanced-by-endpixAI-${selectedFile.name}-LoveBy💞-Harsh.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
