@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.methods.JWT_Token = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRATION || "24h",
+    expiresIn: "7d",
   });
 };
 

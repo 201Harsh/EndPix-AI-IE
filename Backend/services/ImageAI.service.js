@@ -1,19 +1,34 @@
 const { GoogleGenAI, Modality } = require("@google/genai");
 const fs = require("fs");
+const { buffer } = require("stream/consumers");
 
-async function main(prompt, image, type, style) {
+async function main(image, prompt, style) {
   const ai = new GoogleGenAI({
     apiKey: process.env.IMAGE_AI_API,
   });
 
   // Load the image from the local file system
-  const imagePath = "./test.png";
-  const imageData = fs.readFileSync(imagePath);
-  const base64Image = imageData.toString("base64");
+  // const imagePath = image;
+  // const imageData = fs.readFileSync(imagePath);
+  // const base64Image = imageData.toString("base64");
+
+  let base64Image;
+
+  // Handle both base64 input and file path input
+  if (image.startsWith("data:image")) {
+    base64Image = image.replace(/^data:image\/\w+;base64,/, "");
+  } else {
+    const imageData = fs.readFileSync(image);
+    base64Image = imageData.toString("base64");
+  }
 
   // Prepare the content parts
   const contents = [
-    { text: "Can you make this iamge into cyberpunk style?" },
+    {
+      text:
+        prompt ||
+        "Enhance the image quality and details. also make it's color more vibrant.",
+    },
     {
       inlineData: {
         mimeType: "image/png",
@@ -22,23 +37,22 @@ async function main(prompt, image, type, style) {
     },
   ];
 
+  const SystemInstructions = `
+  User's want's Image in this Style : ${style}
+  `;
+
   // Set responseModalities to include "Image" so the model can generate an image
   const response = await ai.models.generateContent({
     model: "gemini-2.0-flash-preview-image-generation",
-    contents: contents,
+    contents: contents + SystemInstructions,
     config: {
       responseModalities: [Modality.TEXT, Modality.IMAGE],
     },
   });
   for (const part of response.candidates[0].content.parts) {
-    // Based on the part type, either show the text or save the image
-    if (part.text) {
-      console.log(part.text);
-    } else if (part.inlineData) {
-      const imageData = part.inlineData.data;
-      const buffer = Buffer.from(imageData, "base64");
-      fs.writeFileSync("gemini-native-image.png", buffer);
-      console.log("Image saved as gemini-native-image.png");
+    if (part.inlineData) {
+      const imageData = part.inlineData.data; // Already base64 encoded by Gemini
+      return `data:image/png;base64,${imageData}`;
     }
   }
 }

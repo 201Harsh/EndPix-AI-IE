@@ -4,10 +4,12 @@ const uploadMiddleware = require("../middlewares/imageUpload.middleware");
 const userMiddleware = require("../middlewares/user.middleware");
 
 router.post(
-  "/get-image",
+  "/upload",
   uploadMiddleware.single("image"),
   userMiddleware.authUser,
   ImageController.GetImage
 );
+
+router.post('/ImageEnhancer', userMiddleware.authUser ,ImageController.EnhanceImage);
 
 module.exports = router;
